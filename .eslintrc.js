@@ -33,4 +33,11 @@ module.exports = {
     'react/prop-types': 'off',
     'react/tsx-props-no-spreading': 'off',
   },
+  settings: {
+    'import/resolver': {
+      alias: {
+        map: [['@src', './src']],
+      },
+    },
+  },
 };
