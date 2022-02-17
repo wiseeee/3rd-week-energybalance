@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -39,17 +40,36 @@ const App: React.FC = () => {
     setInput(target);
   };
 
-  console.log(input);
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    setSearchHistory([input, ...searchHistory]);
+    setInput('');
+  };
+
+  const deleteSearchHistory = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    index: number,
+  ): void => {
+    const temp = [...searchHistory];
+    temp.splice(index, 1);
+    setSearchHistory(temp);
+  };
 
   if (loading) return <div>로딩중..</div>;
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
   return (
     <>
-      <Loading></Loading>
-      <Search input={input} onChange={(e) => onChange(e)}></Search>
-      <SelectBox></SelectBox>
-      <View></View>
+      <Loading />
+      <Search
+        input={input}
+        onChange={onChange}
+        onSubmit={onSubmit}
+        searchHistory={searchHistory}
+        deleteSearchHistory={deleteSearchHistory}
+      />
+      <SelectBox />
+      <View />
     </>
   );
 };
