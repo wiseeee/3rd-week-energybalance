@@ -6,9 +6,13 @@ import View from './components/View/index';
 import axios from 'axios';
 
 const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
-
+type Items = {
+  제품명: string;
+  브랜드: string | null;
+};
 const App: React.FC = () => {
-  const [items, setItems] = useState(null);
+  const [views, setViews] = useState<Items[]>([]);
+  const [items, setItems] = useState<Items[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -20,11 +24,14 @@ const App: React.FC = () => {
     const fetchData = async () => {
       try {
         setError(null);
-        setItems(null);
+        setItems([]);
         setLoading(true);
-        const response = await axios.get(`${MOCK_URL}/nutrients`);
-        setItems(response.data.nutrients);
-        setBrands(response.data.brands);
+        const response = await axios.get(`${MOCK_URL}`);
+        const brandsResponse = await axios.get(`${MOCK_URL}/nutrients`);
+        const { data } = response;
+        setItems(data);
+        setViews(data);
+        setBrands(brandsResponse.data.brands);
         setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -69,12 +76,15 @@ const App: React.FC = () => {
   };
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelected(e.target.value);
+    const target = e.target.value;
+    setSelected(target);
+    if (target) {
+      const filteredItems = items.filter((item) => item.브랜드 === target);
+      setViews(filteredItems);
+    } else {
+      setViews(items);
+    }
   };
-
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
 
   if (loading) return <Loading />;
   if (error) return <div>에러가 발생했습니다</div>;
