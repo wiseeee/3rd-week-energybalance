@@ -20,6 +20,11 @@ const App: React.FC = () => {
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
 
+  async function GetData(API_ADDRESS: string) {
+    const response = await axios.get(API_ADDRESS);
+    return response.data;
+  }
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const target = e.target.value;
     setInput(target);
@@ -60,8 +65,8 @@ const App: React.FC = () => {
       try {
         setError(null);
         setLoading(true);
-        const brandsResponse = await axios.get(`${MOCK_URL}`);
-        setBrands(brandsResponse.data.brands);
+        const brandsResponse = await GetData(MOCK_URL);
+        setBrands(brandsResponse.brands);
         setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -81,14 +86,11 @@ const App: React.FC = () => {
         setError(null);
         setItems([]);
         setLoading(true);
-        const response = await axios.get(
+        const response = await GetData(
           `${MOCK_URL}/nutrients?keyword=${input}`,
         );
-        const { data } = response;
-
         // 5개로 자르기
-        const tmp = data.nutrients.slice(0, 5);
-
+        const tmp = response.nutrients.slice(0, 5);
         setItems(tmp);
 
         setLoading(false);
@@ -103,7 +105,6 @@ const App: React.FC = () => {
     };
     fetchData();
   }, [input]);
-  console.log(items);
 
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
