@@ -31,6 +31,7 @@ const SelectBox: React.FC<Props> = ({
           </S.Option>
         ))}
       </S.SelectBox>
+      <p>추천검색어</p>
       <S.KeywordWrap>
         {recommend.map((tag, index) => (
           <S.Keyword key={index} value={tag.tag} onClick={handleTagClick}>
