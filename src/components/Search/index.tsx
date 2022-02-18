@@ -40,7 +40,7 @@ const Search: React.FC<Props> = ({
       <form onSubmit={onSubmit}>
         <S.Input
           type="text"
-          placeholder="검색하세요"
+          placeholder="제품명, 브랜드를 검색하세요"
           value={input}
           onChange={onChange}
         />
@@ -74,7 +74,7 @@ const Search: React.FC<Props> = ({
             </button>
           </div>
         ))}
-      {loading ? <Loading></Loading> : <div>asdf</div>}
+      {loading ? <Loading /> : <div>asdf</div>}
     </>
   );
 };

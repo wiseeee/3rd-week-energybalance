@@ -64,7 +64,7 @@ const App: React.FC = () => {
     const response = await GetData(
       `${MOCK_URL}/nutrients?keyword=${value || input}`,
     );
-    setView(response);
+    setView(response.nutrients);
     setInput('');
   };
 
