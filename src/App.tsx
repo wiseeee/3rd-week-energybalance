@@ -9,19 +9,22 @@ const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
 
 const App: React.FC = () => {
   const [items, setItems] = useState(null);
+  const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [selected, setSelected] = useState('');
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchData = async () => {
       try {
         setError(null);
         setItems(null);
         setLoading(true);
         const response = await axios.get(`${MOCK_URL}/nutrients`);
-        setItems(response.data);
+        setItems(response.data.nutrients);
+        setBrands(response.data.brands);
         setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -32,9 +35,8 @@ const App: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchItems();
+    fetchData();
   }, []);
-  console.log(items);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const target = e.target.value;
@@ -66,9 +68,18 @@ const App: React.FC = () => {
     }
   };
 
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelected(e.target.value);
+  };
+
+  useEffect(() => {
+    console.log(selected);
+  }, [selected]);
+
   if (loading) return <Loading />;
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
+
   return (
     <>
       <Search
@@ -78,7 +89,11 @@ const App: React.FC = () => {
         searchHistory={searchHistory}
         deleteSearchHistory={deleteSearchHistory}
       />
-      <SelectBox />
+      <SelectBox
+        selected={selected}
+        handleSelect={handleSelect}
+        brands={brands}
+      />
       <View />
     </>
   );
