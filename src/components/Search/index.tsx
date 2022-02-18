@@ -1,5 +1,4 @@
 import React from 'react';
-import Loading from '../Loading';
 import * as S from './styled';
 
 interface Item {
@@ -74,7 +73,6 @@ const Search: React.FC<Props> = ({
             </button>
           </div>
         ))}
-      {loading ? <Loading /> : <div>asdf</div>}
     </>
   );
 };

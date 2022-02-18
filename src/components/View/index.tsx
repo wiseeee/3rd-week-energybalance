@@ -5,8 +5,6 @@ type Props = {
 };
 
 const View: React.FC<Props> = ({ view }) => {
-  console.log(view);
-
   return (
     <div>
       {view.map((item) => (

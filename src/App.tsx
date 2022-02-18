@@ -4,6 +4,7 @@ import Search from './components/Search/index';
 import SelectBox from './components/SelectBox/index';
 import View from './components/View/index';
 import axios from 'axios';
+import Loading from './components/Loading';
 
 const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
 export type Items = {
@@ -11,7 +12,6 @@ export type Items = {
   브랜드: string | null;
 };
 const App: React.FC = () => {
-  console.log('render App');
   const [items, setItems] = useState<Items[]>([]);
   const [view, setView] = useState([]);
   const [brands, setBrands] = useState<string[]>([]);
@@ -20,9 +20,12 @@ const App: React.FC = () => {
   const [input, setInput] = useState('');
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
+  const [currentValue, setCurrentValue] = useState('');
 
   async function GetData(API_ADDRESS: string) {
+    setLoading(true);
     const response = await axios.get(API_ADDRESS);
+    setLoading(false);
     return response.data;
   }
 
@@ -66,16 +69,25 @@ const App: React.FC = () => {
     );
     setView(response.nutrients);
     setInput('');
+    setCurrentValue(value || input);
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await GetData(
+        `${MOCK_URL}/nutrients?keyword=${currentValue}&brand=${selected}`,
+      );
+      setView(res.nutrients);
+    };
+    getData();
+  }, [selected]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setError(null);
-        setLoading(true);
         const brandsResponse = await GetData(MOCK_URL);
         setBrands(brandsResponse.brands);
-        setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {
           return {
@@ -93,15 +105,12 @@ const App: React.FC = () => {
       try {
         setError(null);
         setItems([]);
-        setLoading(true);
         const response = await GetData(
           `${MOCK_URL}/nutrients?keyword=${input}`,
         );
         // 5개로 자르기
         const tmp = response.nutrients.slice(0, 5);
         setItems(tmp);
-
-        setLoading(false);
       } catch (err: unknown) {
         if (err instanceof Error) {
           return {
@@ -134,7 +143,7 @@ const App: React.FC = () => {
         handleSelect={handleSelect}
         brands={brands}
       />
-      <View view={view} />
+      {loading ? <Loading /> : <View view={view} />}
     </>
   );
 };
