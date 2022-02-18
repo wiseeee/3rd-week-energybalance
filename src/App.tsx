@@ -34,6 +34,7 @@ const App: React.FC = () => {
     };
     fetchItems();
   }, []);
+  console.log(items);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const target = e.target.value;
@@ -55,12 +56,11 @@ const App: React.FC = () => {
     setSearchHistory(temp);
   };
 
-  if (loading) return <div>로딩중..</div>;
+  if (loading) return <Loading />;
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
   return (
     <>
-      <Loading />
       <Search
         input={input}
         onChange={onChange}
