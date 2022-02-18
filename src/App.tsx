@@ -12,6 +12,7 @@ type Items = {
 };
 const App: React.FC = () => {
   const [items, setItems] = useState<Items[]>([]);
+  const [view, setView] = useState('');
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -84,7 +85,11 @@ const App: React.FC = () => {
           `${MOCK_URL}/nutrients?keyword=${input}`,
         );
         const { data } = response;
-        setItems(data.nutrients);
+
+        // 5개로 자르기
+        const tmp = data.nutrients.slice(0, 5);
+
+        setItems(tmp);
 
         setLoading(false);
       } catch (err: unknown) {
@@ -111,13 +116,16 @@ const App: React.FC = () => {
         onSubmit={onSubmit}
         searchHistory={searchHistory}
         deleteSearchHistory={deleteSearchHistory}
+        loading={loading}
+        items={items}
+        setView={setView}
       />
       <SelectBox
         selected={selected}
         handleSelect={handleSelect}
         brands={brands}
       />
-      <View loading={loading} items={items} />
+      <View view={view} />
     </>
   );
 };

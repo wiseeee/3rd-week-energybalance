@@ -1,23 +1,10 @@
 import React from 'react';
-import Loading from '../Loading';
 
-interface Item {
-  제품명: string;
-  브랜드: string | null;
-}
 type Props = {
-  loading: boolean;
-  items: Item[];
+  view: string;
 };
 
-const View: React.FC<Props> = ({ loading, items }) => {
-  return (
-    <>
-      {items.map((item, index) => (
-        <div key={index}>{item.제품명}</div>
-      ))}
-      {loading ? <Loading></Loading> : <div>asdf</div>}
-    </>
-  );
+const View: React.FC<Props> = ({ view }) => {
+  return <div>{view}</div>;
 };
 export default View;
