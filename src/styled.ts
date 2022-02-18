@@ -2,12 +2,10 @@ import styled from 'styled-components';
 
 export const ItemList = styled.ul`
   padding: 0;
+  border-bottom: 1px solid #e0e0e0;
   a {
     text-decoration: none;
     color: #000;
-  }
-  &:last-child {
-    border-bottom: 1px solid #e0e0e0;
   }
 `;
 

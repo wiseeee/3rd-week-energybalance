@@ -31,6 +31,7 @@ export const SubmitButton = styled.button`
   border: none;
   white-space: nowrap;
   padding: 0 40px;
+  border-radius: 5px;
 `;
 
 export const RecommendBox = styled.ul`

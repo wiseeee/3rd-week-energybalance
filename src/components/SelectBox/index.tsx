@@ -31,13 +31,13 @@ const SelectBox: React.FC<Props> = ({
           </S.Option>
         ))}
       </S.SelectBox>
-      <ul>
+      <S.KeywordWrap>
         {recommend.map((tag, index) => (
-          <button key={index} value={tag.tag} onClick={handleTagClick}>
+          <S.Keyword key={index} value={tag.tag} onClick={handleTagClick}>
             {`${tag.tag} (${tag.count})`}
-          </button>
+          </S.Keyword>
         ))}
-      </ul>
+      </S.KeywordWrap>
     </>
   );
 };
