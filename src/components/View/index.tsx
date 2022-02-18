@@ -1,16 +1,22 @@
 import React from 'react';
 import { Items } from '../../App';
+import * as S from './styled';
 type Props = {
   view: Items[];
 };
 
 const View: React.FC<Props> = ({ view }) => {
   return (
-    <div>
+    <S.ItemList>
       {view.map((item) => (
-        <div>{item.제품명}</div>
+        <a href="#">
+          <S.ItemWrap>
+            <S.ItemsBrand>{item.브랜드}</S.ItemsBrand>
+            <S.ItemsName>{item.제품명}</S.ItemsName>
+          </S.ItemWrap>
+        </a>
       ))}
-    </div>
+    </S.ItemList>
   );
 };
 export default View;

@@ -35,16 +35,16 @@ const Search: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <S.Logo>6티드</S.Logo>
-      <form onSubmit={onSubmit}>
+      <S.Logo>SIXTED</S.Logo>
+      <S.SearchWrap onSubmit={onSubmit}>
         <S.Input
           type="text"
           placeholder="제품명, 브랜드를 검색하세요"
           value={input}
           onChange={onChange}
         />
-        <button type="submit">제출</button>
-      </form>
+        <S.SubmitButton type="submit">검색</S.SubmitButton>
+      </S.SearchWrap>
       {searchHistory.map((search, index) => {
         return (
           <div key={index}>

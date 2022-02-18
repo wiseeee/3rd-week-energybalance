@@ -6,6 +6,12 @@ import View from './components/View/index';
 import axios from 'axios';
 import Loading from './components/Loading';
 import useDebounce from './hooks/useDebounce';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  max-width: 768px;
+  margin: 0 auto;
+`;
 
 const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
 export type Items = {
@@ -130,22 +136,24 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Search
-        input={input}
-        onChange={onChange}
-        onSubmit={onSubmit}
-        searchHistory={searchHistory}
-        deleteSearchHistory={deleteSearchHistory}
-        loading={loading}
-        items={items}
-        setInput={setInput}
-      />
-      <SelectBox
-        selected={selected}
-        handleSelect={handleSelect}
-        brands={brands}
-      />
-      {loading ? <Loading /> : <View view={view} />}
+      <Wrapper>
+        <Search
+          input={input}
+          onChange={onChange}
+          onSubmit={onSubmit}
+          searchHistory={searchHistory}
+          deleteSearchHistory={deleteSearchHistory}
+          loading={loading}
+          items={items}
+          setInput={setInput}
+        />
+        <SelectBox
+          selected={selected}
+          handleSelect={handleSelect}
+          brands={brands}
+        />
+        {loading ? <Loading /> : <View view={view} />}
+      </Wrapper>
     </>
   );
 };
