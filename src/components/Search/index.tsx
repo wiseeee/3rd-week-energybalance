@@ -46,36 +46,34 @@ const Search: React.FC<Props> = ({
         />
         <button type="submit">제출</button>
       </form>
-      {input.length === 0
-        ? searchHistory.map((search, index) => {
-            return (
-              <div key={index}>
-                <button
-                  onClick={(e) => {
-                    onSubmit(e, search);
-                  }}
-                >
-                  {search}
-                </button>
-                <button onClick={(e) => deleteSearchHistory(e, index)}>
-                  X
-                </button>
-              </div>
-            );
-          })
-        : items.map((item, index) => (
-            <div key={index}>
-              {/* div onclick ?? 실패 */}
-              <button
-                onClick={(e) => {
-                  setInput(item.제품명);
-                  onSubmit(e, item.제품명);
-                }}
-              >
-                {item.제품명}
-              </button>
-            </div>
-          ))}
+      {searchHistory.map((search, index) => {
+        return (
+          <div key={index}>
+            <button
+              onClick={(e) => {
+                onSubmit(e, search);
+              }}
+            >
+              {search}
+            </button>
+            <button onClick={(e) => deleteSearchHistory(e, index)}>X</button>
+          </div>
+        );
+      })}
+      {input.length !== 0 &&
+        items.map((item, index) => (
+          <div key={index}>
+            {/* div onclick ?? 실패 */}
+            <button
+              onClick={(e) => {
+                setInput(item.제품명);
+                onSubmit(e, item.제품명);
+              }}
+            >
+              {item.제품명}
+            </button>
+          </div>
+        ))}
       {loading ? <Loading></Loading> : <div>asdf</div>}
     </>
   );
