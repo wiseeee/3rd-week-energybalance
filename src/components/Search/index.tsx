@@ -31,7 +31,7 @@ const Search: React.FC<Props> = ({
   items,
   setView,
 }) => {
-  const handleAutoCompleteClick = (
+  const handleSetView = (
     e: React.MouseEvent<HTMLButtonElement>,
     value: string,
   ) => setView(value);
@@ -39,14 +39,6 @@ const Search: React.FC<Props> = ({
   return (
     <>
       <S.Logo>6티드</S.Logo>
-      {searchHistory.map((search, index) => {
-        return (
-          <div key={index}>
-            {search}
-            <button onClick={(e) => deleteSearchHistory(e, index)}>X</button>
-          </div>
-        );
-      })}
       <form onSubmit={onSubmit}>
         <S.Input
           type="text"
@@ -56,17 +48,28 @@ const Search: React.FC<Props> = ({
         />
         <button type="submit">제출</button>
       </form>
-      <>
-        {items.map((item, index) => (
-          <div key={index}>
-            {/* div onclick ?? 실패 */}
-            <button onClick={(e) => handleAutoCompleteClick(e, item.제품명)}>
-              {item.제품명}
-            </button>
-          </div>
-        ))}
-        {loading ? <Loading></Loading> : <div>asdf</div>}
-      </>
+      {input.length === 0
+        ? searchHistory.map((search, index) => {
+            return (
+              <div key={index}>
+                <button onClick={(e) => handleSetView(e, search)}>
+                  {search}
+                </button>
+                <button onClick={(e) => deleteSearchHistory(e, index)}>
+                  X
+                </button>
+              </div>
+            );
+          })
+        : items.map((item, index) => (
+            <div key={index}>
+              {/* div onclick ?? 실패 */}
+              <button onClick={(e) => handleSetView(e, item.제품명)}>
+                {item.제품명}
+              </button>
+            </div>
+          ))}
+      {loading ? <Loading></Loading> : <div>asdf</div>}
     </>
   );
 };
