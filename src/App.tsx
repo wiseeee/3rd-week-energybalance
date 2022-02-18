@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import Search from './components/Search/index';
@@ -173,6 +174,10 @@ const App: React.FC = () => {
     fetchData();
   }, [debouncedValue]);
 
+  const handleTagClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onSubmit(e, e.currentTarget.value);
+  };
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
 
@@ -194,8 +199,7 @@ const App: React.FC = () => {
           handleSelect={handleSelect}
           brands={brands}
           recommend={recommend}
-          handleOnClick={() => {}}
-          onSubmit={onSubmit}
+          handleTagClick={handleTagClick}
         />
         {currentKeyword && <p>{currentKeyword} 에 대한 검색결과입니다.</p>}
         <InfiniteScroll
@@ -210,8 +214,8 @@ const App: React.FC = () => {
           }
         >
           <S.ItemList>
-            {view.map((item) => (
-              <a href="#">
+            {view.map((item, index) => (
+              <a href="#" key={index}>
                 <S.ItemWrap>
                   <S.ItemsBrand>{item.브랜드}</S.ItemsBrand>
                   <S.ItemsName>{item.제품명}</S.ItemsName>

@@ -10,12 +10,8 @@ type Props = {
   selected: string;
   brands: string[];
   handleSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  handleOnClick: () => void;
-  onSubmit: (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
-    value?: string,
-  ) => void;
   recommend: Tag[];
+  handleTagClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const SelectBox: React.FC<Props> = ({
@@ -23,12 +19,8 @@ const SelectBox: React.FC<Props> = ({
   brands,
   handleSelect,
   recommend,
-  onSubmit,
+  handleTagClick,
 }) => {
-  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    onSubmit(e, e.currentTarget.value);
-  };
   return (
     <>
       <S.SelectBox onChange={handleSelect} value={selected}>
@@ -40,11 +32,10 @@ const SelectBox: React.FC<Props> = ({
         ))}
       </S.SelectBox>
       <ul>
-        {recommend.map((tag) => (
-          <button
-            value={tag.tag}
-            onClick={handleOnClick}
-          >{`${tag.tag} (${tag.count})`}</button>
+        {recommend.map((tag, index) => (
+          <button key={index} value={tag.tag} onClick={handleTagClick}>
+            {`${tag.tag} (${tag.count})`}
+          </button>
         ))}
       </ul>
     </>
