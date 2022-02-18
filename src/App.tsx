@@ -32,7 +32,6 @@ const App: React.FC = () => {
   const [selected, setSelected] = useState('');
   const [token, setToken] = useState(null);
   const [currentKeyword, setCurrentKeyword] = useState('');
-  const [currentBrand, setCurrentBrand] = useState('');
   const [hasMore, setHasMore] = useState(true);
   const [recommend, setRecommend] = useState([]);
 
@@ -91,7 +90,6 @@ const App: React.FC = () => {
   };
 
   const getNextPage = async () => {
-    const newUrl = `${MOCK_URL}${token}`;
     const response = await axios.get(`${MOCK_URL}${token}`);
     const result = response.data;
     const data: Items[] = result.nutrients;
