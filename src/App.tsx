@@ -33,6 +33,7 @@ const App: React.FC = () => {
   const [currentKeyword, setCurrentKeyword] = useState('');
   const [currentBrand, setCurrentBrand] = useState('');
   const [hasMore, setHasMore] = useState(true);
+  const [recommend, setRecommend] = useState([]);
 
   async function GetData(API_ADDRESS: string) {
     setLoading(true);
@@ -117,7 +118,7 @@ const App: React.FC = () => {
   }, [selected]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBrand = async () => {
       try {
         setError(null);
         const brandsResponse = await GetData(MOCK_URL);
@@ -131,7 +132,22 @@ const App: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchData();
+    const fetchTag = async () => {
+      try {
+        setError(null);
+        const res = await GetData(`${MOCK_URL}/tags`);
+        setRecommend(res.tags.slice(0, 10));
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          return {
+            message: `Things exploded (${err.message})`,
+          };
+        }
+        setLoading(false);
+      }
+    };
+    fetchBrand();
+    fetchTag();
   }, []);
 
   useEffect(() => {
@@ -177,6 +193,9 @@ const App: React.FC = () => {
           selected={selected}
           handleSelect={handleSelect}
           brands={brands}
+          recommend={recommend}
+          handleOnClick={() => {}}
+          onSubmit={onSubmit}
         />
         {currentKeyword && <p>{currentKeyword} 에 대한 검색결과입니다.</p>}
         <InfiniteScroll
