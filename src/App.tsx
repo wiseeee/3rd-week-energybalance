@@ -6,13 +6,14 @@ import View from './components/View/index';
 import axios from 'axios';
 
 const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
-type Items = {
+export type Items = {
   제품명: string;
   브랜드: string | null;
 };
 const App: React.FC = () => {
+  console.log('render App');
   const [items, setItems] = useState<Items[]>([]);
-  const [view, setView] = useState('');
+  const [view, setView] = useState([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -39,13 +40,13 @@ const App: React.FC = () => {
     setSearchHistory(temp);
   };
 
-  const changeSearchHistory = () => {
+  const changeSearchHistory = (value = '') => {
     if (searchHistory.length < 10) {
-      setSearchHistory([input, ...searchHistory]);
+      setSearchHistory([value || input, ...searchHistory]);
     } else {
       const tmp = [...searchHistory];
       tmp.pop();
-      setSearchHistory([input, ...tmp]);
+      setSearchHistory([value || input, ...tmp]);
     }
   };
 
@@ -54,9 +55,16 @@ const App: React.FC = () => {
     setSelected(target);
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const onSubmit = async (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+    value = '',
+  ) => {
     e.preventDefault();
-    changeSearchHistory();
+    changeSearchHistory(value || input);
+    const response = await GetData(
+      `${MOCK_URL}/nutrients?keyword=${value || input}`,
+    );
+    setView(response);
     setInput('');
   };
 
@@ -119,7 +127,7 @@ const App: React.FC = () => {
         deleteSearchHistory={deleteSearchHistory}
         loading={loading}
         items={items}
-        setView={setView}
+        setInput={setInput}
       />
       <SelectBox
         selected={selected}

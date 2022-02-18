@@ -10,7 +10,10 @@ interface Item {
 type Props = {
   input: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
+    value?: string,
+  ) => void;
   deleteSearchHistory: (
     e: React.MouseEvent<HTMLButtonElement>,
     index: number,
@@ -18,7 +21,7 @@ type Props = {
   searchHistory: string[];
   loading: boolean;
   items: Item[];
-  setView: (value: string) => any;
+  setInput: any;
 };
 
 const Search: React.FC<Props> = ({
@@ -29,13 +32,8 @@ const Search: React.FC<Props> = ({
   deleteSearchHistory,
   loading,
   items,
-  setView,
+  setInput,
 }) => {
-  const handleSetView = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    value: string,
-  ) => setView(value);
-
   return (
     <>
       <S.Logo>6티드</S.Logo>
@@ -52,7 +50,11 @@ const Search: React.FC<Props> = ({
         ? searchHistory.map((search, index) => {
             return (
               <div key={index}>
-                <button onClick={(e) => handleSetView(e, search)}>
+                <button
+                  onClick={(e) => {
+                    onSubmit(e, search);
+                  }}
+                >
                   {search}
                 </button>
                 <button onClick={(e) => deleteSearchHistory(e, index)}>
@@ -64,7 +66,12 @@ const Search: React.FC<Props> = ({
         : items.map((item, index) => (
             <div key={index}>
               {/* div onclick ?? 실패 */}
-              <button onClick={(e) => handleSetView(e, item.제품명)}>
+              <button
+                onClick={(e) => {
+                  setInput(item.제품명);
+                  onSubmit(e, item.제품명);
+                }}
+              >
                 {item.제품명}
               </button>
             </div>

@@ -1,10 +1,12 @@
 import React from 'react';
-
+import { Items } from '../../App';
 type Props = {
-  view: string;
+  view: Items[];
 };
 
 const View: React.FC<Props> = ({ view }) => {
-  return <div>{view}</div>;
+  console.log(view);
+
+  return <div>View</div>;
 };
 export default View;
