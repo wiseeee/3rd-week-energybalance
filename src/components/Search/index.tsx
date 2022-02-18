@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './styled';
 
 interface Item {
@@ -29,10 +29,12 @@ const Search: React.FC<Props> = ({
   onSubmit,
   searchHistory,
   deleteSearchHistory,
-  loading,
   items,
   setInput,
 }) => {
+  const [inputFocus, setInputFocus] = useState(false);
+  const onFocus = () => setInputFocus(!inputFocus);
+
   return (
     <>
       <S.Logo>SIXTED</S.Logo>
@@ -42,37 +44,42 @@ const Search: React.FC<Props> = ({
           placeholder="제품명, 브랜드를 검색하세요"
           value={input}
           onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onFocus}
         />
         <S.SubmitButton type="submit">검색</S.SubmitButton>
+        <S.RecommendBox inputFocus={inputFocus}>
+          {searchHistory.map((search, index) => {
+            return (
+              <S.Recommend key={index}>
+                <S.ItemName
+                  onClick={(e) => {
+                    onSubmit(e, search);
+                  }}
+                >
+                  {search}
+                </S.ItemName>
+                <S.Xbtn onClick={(e) => deleteSearchHistory(e, index)}>
+                  X
+                </S.Xbtn>
+              </S.Recommend>
+            );
+          })}
+          {input.length !== 0 &&
+            items.map((item, index) => (
+              <S.Recommend key={index}>
+                <S.ItemName
+                  onClick={(e) => {
+                    setInput(item.제품명);
+                    onSubmit(e, item.제품명);
+                  }}
+                >
+                  {item.제품명}
+                </S.ItemName>
+              </S.Recommend>
+            ))}
+        </S.RecommendBox>
       </S.SearchWrap>
-      {searchHistory.map((search, index) => {
-        return (
-          <div key={index}>
-            <button
-              onClick={(e) => {
-                onSubmit(e, search);
-              }}
-            >
-              {search}
-            </button>
-            <button onClick={(e) => deleteSearchHistory(e, index)}>X</button>
-          </div>
-        );
-      })}
-      {input.length !== 0 &&
-        items.map((item, index) => (
-          <div key={index}>
-            {/* div onclick ?? 실패 */}
-            <button
-              onClick={(e) => {
-                setInput(item.제품명);
-                onSubmit(e, item.제품명);
-              }}
-            >
-              {item.제품명}
-            </button>
-          </div>
-        ))}
     </>
   );
 };
