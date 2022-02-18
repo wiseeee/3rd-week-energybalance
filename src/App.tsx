@@ -201,7 +201,11 @@ const App: React.FC = () => {
           recommend={recommend}
           handleTagClick={handleTagClick}
         />
-        {currentKeyword && <p>{currentKeyword} 에 대한 검색결과입니다.</p>}
+        {currentKeyword && (
+          <p>
+            {currentKeyword}({view.length}) 에 대한 검색결과입니다.
+          </p>
+        )}
         <InfiniteScroll
           dataLength={view.length} //This is important field to render the next data
           next={getNextPage}
