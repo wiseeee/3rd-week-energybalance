@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import Search from './components/Search/index';
 import SelectBox from './components/SelectBox/index';
-import View from './components/View/index';
 import axios from 'axios';
 import Loading from './components/Loading';
 import useDebounce from './hooks/useDebounce';
 import styled from 'styled-components';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import * as S from './styled';
 
 const Wrapper = styled.div`
   max-width: 768px;
@@ -20,7 +21,7 @@ export type Items = {
 };
 const App: React.FC = () => {
   const [items, setItems] = useState<Items[]>([]);
-  const [view, setView] = useState([]);
+  const [view, setView] = useState<Items[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -29,6 +30,10 @@ const App: React.FC = () => {
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
   const [currentValue, setCurrentValue] = useState('');
+  const [token, setToken] = useState(null);
+  const [currentKeyword, setCurrentKeyword] = useState('');
+  const [currentBrand, setCurrentBrand] = useState('');
+  const [hasMore, setHasMore] = useState(true);
 
   async function GetData(API_ADDRESS: string) {
     setLoading(true);
@@ -76,9 +81,28 @@ const App: React.FC = () => {
       `${MOCK_URL}/nutrients?keyword=${value || input}`,
     );
     setView(response.nutrients);
+    setToken(response.pagination.next);
+    setCurrentKeyword(value || input);
     setInput('');
     setCurrentValue(value || input);
   };
+
+  const getNextPage = async () => {
+    const newUrl = `${MOCK_URL}${token}`;
+    const response = await axios.get(`${MOCK_URL}${token}`);
+    const result = response.data;
+    const data: Items[] = result.nutrients;
+    setView([...view, ...data]);
+    setToken(result.pagination.next);
+  };
+
+  useEffect(() => {
+    if (token === null) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
+  }, [token]);
 
   useEffect(() => {
     const getData = async () => {
@@ -86,6 +110,7 @@ const App: React.FC = () => {
         `${MOCK_URL}/nutrients?keyword=${currentValue}&brand=${selected}`,
       );
       setView(res.nutrients);
+      setToken(res.pagination.next);
     };
     getData();
   }, [selected]);
@@ -152,7 +177,29 @@ const App: React.FC = () => {
           handleSelect={handleSelect}
           brands={brands}
         />
-        {loading ? <Loading /> : <View view={view} />}
+        {currentValue && <p>{currentValue} 에 대한 검색결과입니다.</p>}
+        <InfiniteScroll
+          dataLength={view.length} //This is important field to render the next data
+          next={getNextPage}
+          hasMore={hasMore}
+          loader={<Loading />}
+          endMessage={
+            <p style={{ textAlign: 'center' }}>
+              <b>모든 상품을 불러왔습니다.</b>
+            </p>
+          }
+        >
+          <S.ItemList>
+            {view.map((item) => (
+              <a href="#">
+                <S.ItemWrap>
+                  <S.ItemsBrand>{item.브랜드}</S.ItemsBrand>
+                  <S.ItemsName>{item.제품명}</S.ItemsName>
+                </S.ItemWrap>
+              </a>
+            ))}
+          </S.ItemList>
+        </InfiniteScroll>
       </Wrapper>
     </>
   );
