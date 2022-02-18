@@ -4,6 +4,7 @@ import Search from './components/Search/index';
 import SelectBox from './components/SelectBox/index';
 import View from './components/View/index';
 import axios from 'axios';
+import useDebounce from './hooks/useDebounce';
 
 const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
 export type Items = {
@@ -18,6 +19,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
+  const debouncedValue = useDebounce<string>(input, 500);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
 
@@ -90,6 +92,8 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log(debouncedValue);
+
       try {
         setError(null);
         setItems([]);
@@ -112,7 +116,7 @@ const App: React.FC = () => {
       }
     };
     fetchData();
-  }, [input]);
+  }, [debouncedValue]);
 
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
