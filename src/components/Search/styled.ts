@@ -35,7 +35,7 @@ export const SubmitButton = styled.button`
 
 export const RecommendBox = styled.ul`
   position: absolute;
-  top: 42px;
+  top: 36px;
   padding: 0;
   background-color: #ffffff;
   width: 100%;

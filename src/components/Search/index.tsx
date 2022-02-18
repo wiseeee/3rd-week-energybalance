@@ -33,19 +33,25 @@ const Search: React.FC<Props> = ({
   setInput,
 }) => {
   const [inputFocus, setInputFocus] = useState(false);
-  const onFocus = () => setInputFocus(!inputFocus);
+
+  const onMouseEnter = (e: React.MouseEvent<HTMLInputElement>) => {
+    setInputFocus(true);
+  };
+
+  const onMouseLeave = (e: React.MouseEvent<HTMLFormElement>) => {
+    setInputFocus(false);
+  };
 
   return (
     <>
       <S.Logo>SIXTED</S.Logo>
-      <S.SearchWrap onSubmit={onSubmit}>
+      <S.SearchWrap onSubmit={onSubmit} onMouseLeave={onMouseLeave}>
         <S.Input
           type="text"
           placeholder="제품명, 브랜드를 검색하세요"
           value={input}
           onChange={onChange}
-          onFocus={onFocus}
-          onBlur={onFocus}
+          onMouseEnter={onMouseEnter}
         />
         <S.SubmitButton type="submit">검색</S.SubmitButton>
         <S.RecommendBox inputFocus={inputFocus}>
