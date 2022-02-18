@@ -15,9 +15,18 @@ type Props = {
 const Search: React.FC<Props> = (props) => {
   const { input, onChange, onSubmit, searchHistory, deleteSearchHistory } =
     props;
+
   return (
     <>
       <S.Logo>6티드</S.Logo>
+      {searchHistory.map((search, index) => {
+        return (
+          <div key={index}>
+            {search}
+            <button onClick={(e) => deleteSearchHistory(e, index)}>X</button>
+          </div>
+        );
+      })}
       <form onSubmit={onSubmit}>
         <S.Input
           type="text"
@@ -27,14 +36,6 @@ const Search: React.FC<Props> = (props) => {
         />
         <button type="submit">제출</button>
       </form>
-      {searchHistory.map((search, index) => {
-        return (
-          <div key={index}>
-            {search}
-            <button onClick={(e) => deleteSearchHistory(e, index)}>X</button>
-          </div>
-        );
-      })}
     </>
   );
 };

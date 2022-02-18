@@ -84,7 +84,7 @@ const App: React.FC = () => {
           `${MOCK_URL}/nutrients?keyword=${input}`,
         );
         const { data } = response;
-        setItems(data);
+        setItems(data.nutrients);
 
         setLoading(false);
       } catch (err: unknown) {
@@ -117,9 +117,8 @@ const App: React.FC = () => {
         handleSelect={handleSelect}
         brands={brands}
       />
-      <View loading={loading} />
+      <View loading={loading} items={items} />
     </>
   );
 };
-
 export default App;
