@@ -29,7 +29,6 @@ const App: React.FC = () => {
   const debouncedValue = useDebounce<string>(input, 500);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
-  const [currentValue, setCurrentValue] = useState('');
   const [token, setToken] = useState(null);
   const [currentKeyword, setCurrentKeyword] = useState('');
   const [currentBrand, setCurrentBrand] = useState('');
@@ -56,8 +55,12 @@ const App: React.FC = () => {
     setSearchHistory(temp);
   };
 
-  const changeSearchHistory = (value = '') => {
-    if (searchHistory.length < 10) {
+  const changeSearchHistory = (value: string) => {
+    if (searchHistory.includes(value)) {
+      const filteredHistory = searchHistory.filter((ele) => ele !== value);
+      filteredHistory.unshift(value);
+      setSearchHistory(filteredHistory);
+    } else if (searchHistory.length < 10) {
       setSearchHistory([value || input, ...searchHistory]);
     } else {
       const tmp = [...searchHistory];
@@ -76,15 +79,13 @@ const App: React.FC = () => {
     value = '',
   ) => {
     e.preventDefault();
-    changeSearchHistory(value || input);
-    const response = await GetData(
-      `${MOCK_URL}/nutrients?keyword=${value || input}`,
-    );
+    const result = value || input;
+    setCurrentKeyword(result);
+    changeSearchHistory(result);
+    const response = await GetData(`${MOCK_URL}/nutrients?keyword=${result}`);
     setView(response.nutrients);
     setToken(response.pagination.next);
-    setCurrentKeyword(value || input);
     setInput('');
-    setCurrentValue(value || input);
   };
 
   const getNextPage = async () => {
@@ -107,7 +108,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const getData = async () => {
       const res = await GetData(
-        `${MOCK_URL}/nutrients?keyword=${currentValue}&brand=${selected}`,
+        `${MOCK_URL}/nutrients?keyword=${currentKeyword}&brand=${selected}`,
       );
       setView(res.nutrients);
       setToken(res.pagination.next);
@@ -177,7 +178,7 @@ const App: React.FC = () => {
           handleSelect={handleSelect}
           brands={brands}
         />
-        {currentValue && <p>{currentValue} 에 대한 검색결과입니다.</p>}
+        {currentKeyword && <p>{currentKeyword} 에 대한 검색결과입니다.</p>}
         <InfiniteScroll
           dataLength={view.length} //This is important field to render the next data
           next={getNextPage}
