@@ -1,9 +1,8 @@
 import React from 'react';
-import icon from './img/icon_pill.png';
 import * as S from './styled';
 
 const Loading: React.FC = () => {
-  return <S.LoadingIcon src={icon} />;
+  return <S.LoadingIcon src="images/icon_pill.png" />;
 };
 
 export default Loading;

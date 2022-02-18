@@ -5,7 +5,7 @@ import SelectBox from './components/SelectBox/index';
 import View from './components/View/index';
 import axios from 'axios';
 
-const MOCK_URL = 'https://sixted-energybalance.herokuapp.com/';
+const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
 
 const App: React.FC = () => {
   const [items, setItems] = useState(null);
@@ -20,7 +20,7 @@ const App: React.FC = () => {
         setError(null);
         setItems(null);
         setLoading(true);
-        const response = await axios.get(MOCK_URL);
+        const response = await axios.get(`${MOCK_URL}/nutrients`);
         setItems(response.data);
         setLoading(false);
       } catch (err: unknown) {
@@ -43,7 +43,7 @@ const App: React.FC = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    setSearchHistory([input, ...searchHistory]);
+    changeSearchHistory();
     setInput('');
   };
 
@@ -54,6 +54,16 @@ const App: React.FC = () => {
     const temp = [...searchHistory];
     temp.splice(index, 1);
     setSearchHistory(temp);
+  };
+
+  const changeSearchHistory = () => {
+    if (searchHistory.length < 10) {
+      setSearchHistory([input, ...searchHistory]);
+    } else {
+      const tmp = [...searchHistory];
+      tmp.pop();
+      setSearchHistory([input, ...tmp]);
+    }
   };
 
   if (loading) return <Loading />;
