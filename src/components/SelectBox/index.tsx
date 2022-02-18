@@ -1,4 +1,5 @@
 import React from 'react';
+import * as S from './styled';
 
 type Props = {
   selected: string;
@@ -8,14 +9,14 @@ type Props = {
 
 const SelectBox: React.FC<Props> = ({ selected, brands, handleSelect }) => {
   return (
-    <select onChange={handleSelect} value={selected}>
-      <option value="">--브랜드를 선택해주세요--</option>
+    <S.SelectBox onChange={handleSelect} value={selected}>
+      <S.Option value="">--브랜드를 선택해주세요--</S.Option>
       {brands.map((name, index) => (
-        <option value={name} key={index}>
+        <S.Option value={name} key={index}>
           {name}
-        </option>
+        </S.Option>
       ))}
-    </select>
+    </S.SelectBox>
   );
 };
 
