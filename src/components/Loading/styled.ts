@@ -1,5 +1,13 @@
 import styled, { keyframes } from 'styled-components';
 
+export const FlexBox = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const Rotate = keyframes`
   from {
     transform: rotate(0deg);
@@ -11,4 +19,6 @@ const Rotate = keyframes`
 
 export const LoadingIcon = styled.img`
   animation: ${Rotate} 2s infinite linear;
+  width: 64px;
+  height: 64px;
 `;
