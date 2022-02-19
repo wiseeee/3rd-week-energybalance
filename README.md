@@ -2,16 +2,17 @@
 ![image](https://user-images.githubusercontent.com/82519641/154723407-4b278e49-5324-4b0a-a2f3-8b0219de59a5.png)
 
 
-
 <h1 align="middle">[과제] 에너지밸런스</h1>
 
+<br/>
+
  검색창을 어떻게 배치하고 소비자가 찾고자 하는 키워드를 입력하였을 때 제품을 어떠한 우선순위에 맞게 노출해줄지에 대한 로직을 세워볼 수 있을까요?
+
 <br/>
 
 # 🔗 배포
 
-
-
+https://cocky-edison-1b96cb.netlify.app
 
 <br/>
 
@@ -26,13 +27,11 @@
 # ⚙️ 설치 및 시작하는 법
 
 ```
-$ git clone https://github.com/pre-onboarding-course-team-6/3rd-week-hodoolabs.git
+$ git clone https://github.com/pre-onboarding-course-team-6/3rd-week-energybalance.git
 
-$ 3rd-week-hodoolabs
+$ cd 3rd-week-energybalance
 
-$ yarn i
-
-$ yarn dev
+$ yarn i 혹은 npm i
 
 http://localhost:3000/ 접속
 ```
@@ -40,50 +39,59 @@ http://localhost:3000/ 접속
 <br/>
 
 # 🧚‍♀️ 검색 최적화 로직 설계 Point 5 ✋
-### 🌟 소비자가 원하는 제품을 보다 쉽게 찾을 수 있도록 설계가 목적
-  ```
-    Point01. 검색 입력창에 제품명, 브랜드명 모두 검색 가능
-  ```  
+### ⛳️ 소비자가 원하는 제품을 보다 쉽게 찾을 수 있도록 설계가 목적
+  
+<img src="https://user-images.githubusercontent.com/24728385/154776511-8549f1e4-991f-4aac-b0f4-338fd2f14e67.png" width="100%" />
+  
+ ## ⭐️ Point01. 검색 입력창에 제품명, 브랜드명 모두 검색 가능
+   
   - 처음 검색할 때 아무거나 입력해도 검색결과에 나올수 있도록 설계
   - 한국어, 영어로 입력해도 검색 가능
   - ㅎㅅ, ㅋㅋ 등 초성으로 입력해도 검색 가능
   - '버타민' 같은 오타 입력시 -> '비타민'으로 올바르게 검색 가능
 
-  ![image](https://user-images.githubusercontent.com/82519641/154726198-36980529-6874-46d3-be9e-f3dd713352fb.png)
-  ```
-    Point02. 검색창 하단으로 최근 검색어 및 자동완성 기능
-  ```  
+<br/>
+<hr/>
+
+<img src="https://user-images.githubusercontent.com/82519641/154726198-36980529-6874-46d3-be9e-f3dd713352fb.png" width="100%" />
+
+  ## ⭐️ Point02. 검색창 하단으로 최근 검색어 및 자동완성 기능
+
   - 처음 검색 할 때는 하단으로 자동완성 문자 나열 (10개까지)
   - 두번째 검색 할 때는 하단으로 검색기록 확인 가능
-  - 검색기록으로 확인 된 문자 삭제 가능
+  - 검색기록 옆의 X 버튼으로 삭제 가능
 
-![image](https://user-images.githubusercontent.com/82519641/154732293-2649bf2a-7063-485a-b9a2-fac4daa630b3.png)
+<br/>
+<hr/>
 
-  ```
-    Point03. 더 세밀한 검색을 돕기 위한 브랜드 필터 / keywords 추천 / 검색결과 확인 가능
-  ``` 
-  - 제품명 or 브랜드명으로 검색시 좀 더 디테일한 검색결과를 보여주기 위해 브랜드를 선택해서 검색 가능하도록 기능 구현 (검색어와 브랜드 교집합)
+<img src="https://user-images.githubusercontent.com/24728385/154777167-613bd1a9-a1c1-463f-893b-296707af6761.png" width="100%" />
+<img src="https://user-images.githubusercontent.com/24728385/154777143-9508ccda-1ddc-4ca2-a5b3-c17b97bdbea1.png" width="100%" />
+
+  ## ⭐️ Point03. 더 세밀한 검색을 돕기 위한 브랜드 필터 / keywords 추천 / 검색결과 확인 가능
+  - 좀 더 디테일한 검색결과를 보여주기 위해 브랜드를 옵션으로 선택해서 검색 가능하도록 기능 구현 (검색어와 브랜드 교집합)
   - 검색 없이 브랜드명으로만 먼저 검색 가능
   - 제품명, 브랜드명중 가장 많은 keyword로 검색 추천
   - 제품명, 브랜드명을 취합하여 가장 많은 단어로 추려 소비자에게 검색어 추천
-  - 추천 키워드 옆 숫자 갯수 의미???????
   - ex)'코코' 검색시 검색결과 갯수, 검색문자 확인 가능 
-  ```
-    Point04. 서버 과부화 방지를 위한 Debounce / 무한 스크롤링
-  ``` 
+
+<br/>
+<hr/>
+
+ ## ⭐️ Point04. 서버 과부화 방지를 위한 Debounce / 무한 스크롤링
   - 서버 과부화 방지를 위한 검색어 입력 Debounce 처리 
-  - 자동 검색어 기능 가능하면서 검색어 입력할 때는 Debounce 처리해서 한 번만 검색
-  - 검색 했을 때 수많은 데이터가 나오면 검색결과가 늦게 나올 수 있어 60개씩 나눠 먼저 나온 후 소비자가 보기 편하게 나머지는 무한 스크롤링 
+  - 마지막 입력 후 0.5동안 입력이 없으면 Debounce 처리해서 한 번만 검색
+  - 최대 60개씩 보여주고 스크롤이 리스트에 끝에 도달하면 추가적으로 데이터 로드
   - 우리에게 가장 익숙한 오름차순 정렬 
-  ```
-    Point5. 누가봐도 쉽게 사용 할 수 있게 직관적인 디자인
-  ``` 
+
+<br/>
+<hr/>
+
+  ## ⭐️ Point5. 누가봐도 쉽게 사용 할 수 있게 직관적인 디자인 
   - 누가 봐도 손쉽게 사용 할 수 있도록 기능을 숨기지 않고 밖으로 모두 노출
   - 클릭, 엔터 수를 줄이기 위해 검색창 hover해도 자동완성, 최근검색어 확인 가능
-  - 브랜드명 검색은 의무적인 기능이 아니고 사용자가 선택 가능
-  - 실제 홈페이지에 구현 할 때  모달 창으로 가능
+  - 추후 업데이트로 검색결과 리스트 중 클릭시 제품 정보를 모달 창으로 보여줄 수 있음
 
-  <br/><br/>
+  <br/>
 
 # 🏹 과제 구현 목록 및 담당
 > ✨ 참고 링크 및 추가 안내 [Notion🔗](https://www.notion.so/minbr0ther/646973df27864ba6974e5de544bed4c6)
