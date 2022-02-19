@@ -30,12 +30,12 @@ const App: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const [recommend, setRecommend] = useState([]);
 
-  async function GetData(API_ADDRESS: string) {
+  const GetData = async (API_ADDRESS: string) => {
     setLoading(true);
     const response = await axios.get(API_ADDRESS);
     setLoading(false);
     return response.data;
-  }
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const target = e.target.value;
@@ -44,18 +44,16 @@ const App: React.FC = () => {
 
   const deleteSearchHistory = (
     e: React.MouseEvent<HTMLButtonElement>,
-    index: number,
+    targetIndex: number,
   ): void => {
-    const temp = [...searchHistory];
-    temp.splice(index, 1);
+    const temp = searchHistory.filter((_, index) => index !== targetIndex);
     setSearchHistory(temp);
   };
 
   const changeSearchHistory = (value: string) => {
     if (searchHistory.includes(value)) {
       const filteredHistory = searchHistory.filter((ele) => ele !== value);
-      filteredHistory.unshift(value);
-      setSearchHistory(filteredHistory);
+      setSearchHistory([value, ...filteredHistory]);
     } else if (searchHistory.length < 10) {
       setSearchHistory([value || input, ...searchHistory]);
     } else {
@@ -66,8 +64,12 @@ const App: React.FC = () => {
   };
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const target = e.target.value;
-    setSelected(target);
+    setSelected(e.target.value);
+  };
+
+  const handleTagClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onSubmit(e, e.currentTarget.value);
   };
 
   const onSubmit = async (
@@ -75,9 +77,12 @@ const App: React.FC = () => {
     value = '',
   ) => {
     e.preventDefault();
+
     const result = value || input;
+    if (result.length === 0) return;
     setCurrentKeyword(result);
     changeSearchHistory(result);
+
     const response = await GetData(`${MOCK_URL}/nutrients?keyword=${result}`);
     setView(response.nutrients);
     setToken(response.pagination.next);
@@ -93,68 +98,53 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    const fetchBrandAndTags = async () => {
+      try {
+        setError(null);
+
+        const tagsResponse = await GetData(`${MOCK_URL}/tags`);
+        setRecommend(tagsResponse.tags.slice(0, 10));
+
+        const brandsResponse = await GetData(MOCK_URL);
+        setBrands(brandsResponse.brands);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          return {
+            message: `Things exploded (${err.message})`,
+          };
+        }
+        setLoading(false);
+      }
+    };
+    fetchBrandAndTags();
+  }, []);
+
+  useEffect(() => {
     token === null ? setHasMore(false) : setHasMore(true);
   }, [token]);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await GetData(
+      const response = await GetData(
         `${MOCK_URL}/nutrients?keyword=${currentKeyword}&brand=${selected}`,
       );
-      setView(res.nutrients);
-      setToken(res.pagination.next);
+      setView(response.nutrients);
+      setToken(response.pagination.next);
     };
     getData();
   }, [selected]);
 
-  useEffect(() => {
-    const fetchBrand = async () => {
-      try {
-        setError(null);
-        const brandsResponse = await GetData(MOCK_URL);
-        setBrands(brandsResponse.brands);
-        const tagsResponse = await GetData(`${MOCK_URL}/tags`);
-        setRecommend(tagsResponse.tags.slice(0, 10));
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          return {
-            message: `Things exploded (${err.message})`,
-          };
-        }
-        setLoading(false);
-      }
-    };
-    const fetchTag = async () => {
-      try {
-        setError(null);
-        const res = await GetData(`${MOCK_URL}/tags`);
-        setRecommend(res.tags.slice(0, 10));
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          return {
-            message: `Things exploded (${err.message})`,
-          };
-        }
-        setLoading(false);
-      }
-    };
-    fetchBrand();
-    fetchTag();
-  }, []);
-
   const debouncedValue = useDebounce<string>(input);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const getData = async () => {
       try {
         setError(null);
         setItems([]);
         const response = await GetData(
           `${MOCK_URL}/nutrients?keyword=${input}`,
         );
-        // 5개로 자르기
-        const tmp = response.nutrients.slice(0, 5);
-        setItems(tmp);
+        setItems(response.nutrients.slice(0, 5));
       } catch (err: unknown) {
         if (err instanceof Error) {
           return {
@@ -164,67 +154,62 @@ const App: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchData();
+    getData();
   }, [debouncedValue]);
-
-  const handleTagClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    onSubmit(e, e.currentTarget.value);
-  };
 
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
 
   return (
-    <>
-      <S.Wrapper>
-        <Search
-          input={input}
-          onChange={onChange}
-          onSubmit={onSubmit}
-          searchHistory={searchHistory}
-          deleteSearchHistory={deleteSearchHistory}
-          loading={loading}
-          items={items}
-          setInput={setInput}
-        />
-        <SelectBox
-          selected={selected}
-          handleSelect={handleSelect}
-          brands={brands}
-          recommend={recommend}
-          handleTagClick={handleTagClick}
-        />
-        <br />
-        {currentKeyword && (
-          <p>
-            {currentKeyword}({view.length}) 에 대한 검색결과입니다.
+    <S.Wrapper>
+      <Search
+        input={input}
+        onChange={onChange}
+        onSubmit={onSubmit}
+        searchHistory={searchHistory}
+        deleteSearchHistory={deleteSearchHistory}
+        loading={loading}
+        items={items}
+        setInput={setInput}
+      />
+      <SelectBox
+        selected={selected}
+        handleSelect={handleSelect}
+        brands={brands}
+        recommend={recommend}
+        handleTagClick={handleTagClick}
+      />
+      <br />
+      {currentKeyword && (
+        <p>
+          {currentKeyword}({view.length}) 에 대한 검색결과입니다.
+        </p>
+      )}
+      <InfiniteScroll
+        dataLength={view.length}
+        next={getNextPage}
+        hasMore={hasMore}
+        loader={<Loading />}
+        endMessage={
+          <p style={{ textAlign: 'center' }}>
+            <b>모든 상품을 불러왔습니다.</b>
           </p>
-        )}
-        <InfiniteScroll
-          dataLength={view.length} //This is important field to render the next data
-          next={getNextPage}
-          hasMore={hasMore}
-          loader={<Loading />}
-          endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>모든 상품을 불러왔습니다.</b>
-            </p>
-          }
-        >
+        }
+      >
+        {view.length ? (
           <S.ItemList>
             {view.map((item, index) => (
-              <a href="#" key={index}>
-                <S.ItemWrap>
-                  <S.ItemsBrand>{item.브랜드}</S.ItemsBrand>
-                  <S.ItemsName>{item.제품명}</S.ItemsName>
-                </S.ItemWrap>
-              </a>
+              <S.ItemWrap key={index}>
+                <S.ItemsBrand>{item.브랜드}</S.ItemsBrand>
+                <S.ItemsName>{item.제품명}</S.ItemsName>
+              </S.ItemWrap>
             ))}
           </S.ItemList>
-        </InfiniteScroll>
-      </S.Wrapper>
-    </>
+        ) : (
+          <Loading />
+        )}
+      </InfiniteScroll>
+    </S.Wrapper>
   );
 };
 export default App;

@@ -7,6 +7,7 @@ export const Logo = styled.div`
 `;
 
 export const SearchWrap = styled.form`
+  margin: 20px 0px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

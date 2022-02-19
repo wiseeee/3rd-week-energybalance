@@ -33,11 +33,15 @@ const SelectBox: React.FC<Props> = ({
       </S.SelectBox>
       <p>추천검색어</p>
       <S.KeywordWrap>
-        {recommend.map((tag, index) => (
-          <S.Keyword key={index} value={tag.tag} onClick={handleTagClick}>
-            {`${tag.tag}`}
-          </S.Keyword>
-        ))}
+        {recommend.length ? (
+          recommend.map((tag, index) => (
+            <S.Keyword key={index} value={tag.tag} onClick={handleTagClick}>
+              {`${tag.tag}`}
+            </S.Keyword>
+          ))
+        ) : (
+          <span>로드중..</span>
+        )}
       </S.KeywordWrap>
     </>
   );
