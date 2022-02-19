@@ -6,20 +6,16 @@ import SelectBox from './components/SelectBox/index';
 import axios from 'axios';
 import Loading from './components/Loading';
 import useDebounce from './hooks/useDebounce';
-import styled from 'styled-components';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import * as S from './styled';
 
-const Wrapper = styled.div`
-  max-width: 768px;
-  margin: 0 auto;
-`;
-
 const MOCK_URL = 'https://sixted-energybalance.herokuapp.com';
+
 export type Items = {
   제품명: string;
   브랜드: string | null;
 };
+
 const App: React.FC = () => {
   const [items, setItems] = useState<Items[]>([]);
   const [view, setView] = useState<Items[]>([]);
@@ -27,7 +23,6 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
-  const debouncedValue = useDebounce<string>(input);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
   const [token, setToken] = useState(null);
@@ -98,11 +93,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
-    if (token === null) {
-      setHasMore(false);
-    } else {
-      setHasMore(true);
-    }
+    token === null ? setHasMore(false) : setHasMore(true);
   }, [token]);
 
   useEffect(() => {
@@ -122,6 +113,8 @@ const App: React.FC = () => {
         setError(null);
         const brandsResponse = await GetData(MOCK_URL);
         setBrands(brandsResponse.brands);
+        const tagsResponse = await GetData(`${MOCK_URL}/tags`);
+        setRecommend(tagsResponse.tags.slice(0, 10));
       } catch (err: unknown) {
         if (err instanceof Error) {
           return {
@@ -148,6 +141,8 @@ const App: React.FC = () => {
     fetchBrand();
     fetchTag();
   }, []);
+
+  const debouncedValue = useDebounce<string>(input);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -182,7 +177,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Wrapper>
+      <S.Wrapper>
         <Search
           input={input}
           onChange={onChange}
@@ -228,7 +223,7 @@ const App: React.FC = () => {
             ))}
           </S.ItemList>
         </InfiniteScroll>
-      </Wrapper>
+      </S.Wrapper>
     </>
   );
 };

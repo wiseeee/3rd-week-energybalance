@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+export const Wrapper = styled.div`
+  max-width: 768px;
+  margin: 0 auto;
+`;
+
 export const ItemList = styled.ul`
   padding: 0;
   border-bottom: 1px solid #e0e0e0;
