@@ -35,7 +35,7 @@ const SelectBox: React.FC<Props> = ({
       <S.KeywordWrap>
         {recommend.map((tag, index) => (
           <S.Keyword key={index} value={tag.tag} onClick={handleTagClick}>
-            {`${tag.tag} (${tag.count})`}
+            {`${tag.tag}`}
           </S.Keyword>
         ))}
       </S.KeywordWrap>

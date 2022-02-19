@@ -24,6 +24,12 @@ export const Keyword = styled.button`
   background-color: transparent;
   border: none;
   padding: 5px 20px 5px 0;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
+  }
 `;

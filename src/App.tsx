@@ -27,7 +27,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [input, setInput] = useState('');
-  const debouncedValue = useDebounce<string>(input, 500);
+  const debouncedValue = useDebounce<string>(input);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [selected, setSelected] = useState('');
   const [token, setToken] = useState(null);
@@ -176,6 +176,7 @@ const App: React.FC = () => {
     e.preventDefault();
     onSubmit(e, e.currentTarget.value);
   };
+
   if (error) return <div>에러가 발생했습니다</div>;
   if (!items) return null;
 
@@ -199,6 +200,7 @@ const App: React.FC = () => {
           recommend={recommend}
           handleTagClick={handleTagClick}
         />
+        <br />
         {currentKeyword && (
           <p>
             {currentKeyword}({view.length}) 에 대한 검색결과입니다.
