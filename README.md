@@ -2,7 +2,7 @@
 ![image](https://user-images.githubusercontent.com/82519641/154723407-4b278e49-5324-4b0a-a2f3-8b0219de59a5.png)
 
 
-<h1 align="middle">[과제] 에너지밸런스</h1>
+<h1 align="middle">쉽게 검색하기 위한 로직</h1>
 
 <br/>
 
