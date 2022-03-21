@@ -24,19 +24,7 @@ https://cocky-edison-1b96cb.netlify.app
 
 <br/>
 
-# ⚙️ 설치 및 시작하는 법
 
-```
-$ git clone https://github.com/pre-onboarding-course-team-6/3rd-week-energybalance.git
-
-$ cd 3rd-week-energybalance
-
-$ yarn i 혹은 npm i
-
-http://localhost:3000/ 접속
-```
-
-<br/>
 
 # 🧚‍♀️ 검색 최적화 로직 설계 Point 5 ✋
 ### ⛳️ 소비자가 원하는 제품을 보다 쉽게 찾을 수 있도록 설계가 목적
@@ -91,39 +79,6 @@ http://localhost:3000/ 접속
   - 클릭, 엔터 수를 줄이기 위해 검색창 hover해도 자동완성, 최근검색어 확인 가능
   - 추후 업데이트로 검색결과 리스트 중 클릭시 제품 정보를 모달 창으로 보여줄 수 있음
 
-  <br/>
-
-# 🏹 과제 구현 목록 및 담당
-> ✨ 참고 링크 및 추가 안내 [Notion🔗](https://www.notion.so/minbr0ther/646973df27864ba6974e5de544bed4c6)
-<hr/>
-
-### [22_01 민무길](https://github.com/gilmujjang)
-
-1. 검색창 작성, 검색기록 기능 구현
-2. 자동완성, 검색기록 기능 구현
-3. 검색 창 CSS 스타일 담당
-4. 오류해결
-
-### [22_01 정민형](https://github.com/minbr0ther)
-
-1. 브랜드 선택 필터링 기능 구현
-2. 검색 debounce 구현
-3. 자동완성, 검색기록 기능 구현
-4. 오류해결
-
-### [22_01 김선명](https://github.com/BGM-109)
-
-1. API 서버 담당
-2. 무한 스크롤링 구현
-3. 자동완성, 검색기록 기능 구현
-4. 오류해결
-
-### [22_01 이현명](https://github.com/wiseeee)
-
-1. CSS 스타일 담당
-2. 초기 세팅 담당
-<br/>
-
 <br/>
 
 # 🏗 프로젝트 구조
@@ -147,6 +102,19 @@ src
  ┗ styled.ts
 ```
 <br/>
+# ⚙️ 설치 및 시작하는 법
+
+```
+$ git clone https://github.com/wiseeee/3rd-week-energybalance.git
+
+$ cd 3rd-week-energybalance
+
+$ yarn i 혹은 npm i
+
+http://localhost:3000/ 접속
+```
+
+<br/>
 
 ## ✅ Git - Commit Message Convention [🔗](https://webruden.tistory.com/486)
 
@@ -159,9 +127,3 @@ src
 - chore : 빌드 업무 수정, 패키지 매니저 수정 (updating build tasks, package manager configs, etc; no production code change)
 <br/>
 
-
-## 👨‍👨‍👦‍👦 팀구성원 소개
-
-| [<img src="https://github.com/minbr0ther.png" width="100px">](https://github.com/minbr0ther) | [<img src="https://github.com/BGM-109.png" width="100px">](https://github.com/BGM-109) | [<img src="https://github.com/wiseeee.png" width="100px">](https://github.com/wiseeee) | [<img src="https://github.com/gilmujjang.png" width="100px">](https://github.com/gilmujjang) |
-| :------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------: |
-|                        [22_01 정민형](https://github.com/minbr0ther)                         |                       [22_01 김선명](https://github.com/BGM-109)                       |                       [22_01 이현명](https://github.com/wiseeee)                       |                        [22_01 민무길](https://github.com/gilmujjang)                         |
